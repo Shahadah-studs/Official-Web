@@ -199,6 +199,83 @@
     <br>
     <br>
     <br>
+   <!-- Include the official modern p5.js library engine -->
+<script src="https://cloudflare.com"></script>
+
+<!-- Custom Handwritten SHS Render Canvas -->
+<script>
+  let particles = [];
+  const maxParticles = 60; // Optimized threshold to prevent lags
+
+  function setup() {
+    // Spawns the rendering layer smoothly across the full client window screen
+    let canvas = createCanvas(windowWidth, windowHeight);
+    canvas.position(0, 0);
+    canvas.style('z-index', '-1'); // Places it safely in the background behind text/buttons
+    
+    // Initial loop parameters to construct coordinate objects manually
+    for (let i = 0; i < maxParticles; i++) {
+      particles.push(new NetworkNode());
+    }
+  }
+
+  function draw() {
+    background(10, 10, 12); // Deep midnight-dark canvas theme
+    
+    // Process tracking vectors frame-by-frame
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update();
+      particles[i].display();
+      particles[i].connect(particles);
+    }
+  }
+
+  // Ensures the rendering matrix adapts instantly if a user resizes their window
+  function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+  }
+
+  // Clean, lightweight class structure to manage vector positions manually
+  class NetworkNode {
+    constructor() {
+      this.x = random(width);
+      this.y = random(height);
+      this.vx = random(-0.8, 0.8); // Smooth movement speeds
+      this.vy = random(-0.8, 0.8);
+      this.radius = random(2, 4);
+    }
+
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+
+      // Handle structural screen boundary bounces automatically
+      if (this.x < 0 || this.x > width) this.vx *= -1;
+      if (this.y < 0 || this.y > height) this.vy *= -1;
+    }
+
+    display() {
+      noStroke();
+      fill(0, 255, 255, 200); // Sharp neon cyan node points
+      ellipse(this.x, this.y, this.radius * 2);
+    }
+
+    // Custom distance calculation algorithm to draw lines between nearby coordinates
+    connect(allNodes) {
+      for (let other of allNodes) {
+        let d = dist(this.x, this.y, other.x, other.y);
+        if (d < 100) {
+          // Lines fade out dynamically based on distance vectors
+          let alpha = map(d, 0, 100, 150, 0);
+          stroke(0, 255, 255, alpha);
+          strokeWeight(1);
+          line(this.x, this.y, other.x, other.y);
+        }
+      }
+    }
+  }
+</script>
+<br>
     <!-- Studio Legacy & History Section -->
         <div class="manifesto-box" style="border-left-color: #00ff00; margin-bottom: 40px;">
             <h2 style="color: #00ff00;">Studio History & Legacy</h2>
