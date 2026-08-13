@@ -199,66 +199,97 @@
     <br>
     <br>
     <br>
- <!-- Include the official modern p5.js library engine safely -->
 <!-- STEP 1: Load the official modern p5.js library safely -->
 <script src="https://cloudflare.com"></script>
 
-<!-- STEP 2: The background container node -->
-<div id="shs-matrix-bg" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; pointer-events:none;"></div>
+<!-- STEP 2: The container node (pins the squishy physics safely behind buttons) -->
+<div id="shs-softbody-canvas" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; pointer-events:none;"></div>
 
-<!-- STEP 3: Your separate, handwritten particle canvas code -->
+<!-- STEP 3: The Handwritten Softbody Physics Simulation Engine -->
 <script>
   window.onload = function() {
-    // This wrapper forces p5.js to wait until the page elements are active
     if (typeof p5 !== 'undefined') {
-      new p5(function(sketch) {
-        let particles = [];
-        const maxParticles = 40;
+      new p5(function(s) {
+        // Physics constants for spring tension and node distribution
+        let centerX, centerY;
+        let numNodes = 24; 
+        let radius = 120;
+        let nodes = [];
+        let springConst = 0.04;
+        let damping = 0.88;
 
-        sketch.setup = function() {
-          let canvas = sketch.createCanvas(sketch.windowWidth, sketch.windowHeight);
-          canvas.parent('shs-matrix-bg');
+        s.setup = function() {
+          let canvas = s.createCanvas(s.windowWidth, s.windowHeight);
+          canvas.parent('shs-softbody-canvas');
           
-          for (let i = 0; i < maxParticles; i++) {
-            particles.push({
-              x: sketch.random(sketch.windowWidth),
-              y: sketch.random(sketch.windowHeight),
-              vx: sketch.random(-0.8, 0.8),
-              vy: sketch.random(-0.8, 0.8),
-              size: sketch.random(2, 4)
+          centerX = s.width / 2;
+          centerY = s.height / 2;
+          
+          // Manually plot vectors in a circular perimeter ring
+          for (let i = 0; i < numNodes; i++) {
+            let angle = s.map(i, 0, numNodes, 0, s.TWO_PI);
+            nodes.push({
+              baseX: s.cos(angle) * radius,
+              baseY: s.sin(angle) * radius,
+              x: s.cos(angle) * radius,
+              y: s.sin(angle) * radius,
+              vx: 0,
+              vy: 0
             });
           }
         };
 
-        sketch.draw = function() {
-          sketch.clear();
+        s.draw = function() {
+          s.clear(); // Keeps your background transparent so your CSS remains active
           
-          for (let i = 0; i < particles.length; i++) {
-            let p = particles[i];
-            p.x += p.vx;
-            p.y += p.vy;
+          // Force tracking: Move the central core toward the mouse position smoothly
+          centerX = s.lerp(centerX, s.mouseX || s.width / 2, 0.05);
+          centerY = s.lerp(centerY, s.mouseY || s.height / 2, 0.05);
+          
+          // Calculate individual point vectors frame-by-frame
+          for (let i = 0; i < numNodes; i++) {
+            let n = nodes[i];
             
-            if (p.x < 0 || p.x > sketch.width) p.vx *= -1;
-            if (p.y < 0 || p.y > sketch.height) p.vy *= -1;
+            // Core target physics logic (spring force pull)
+            let targetX = centerX + n.baseX;
+            let targetY = centerY + n.baseY;
             
-            sketch.noStroke();
-            sketch.fill(0, 255, 255, 180);
-            sketch.ellipse(p.x, p.y, p.size);
+            let forceX = (targetX - n.x) * springConst;
+            let forceY = (targetY - n.y) * springConst;
             
-            for (let j = i + 1; j < particles.length; j++) {
-              let other = particles[j];
-              let d = sketch.dist(p.x, p.y, other.x, other.y);
-              if (d < 120) {
-                sketch.stroke(0, 255, 255, sketch.map(d, 0, 120, 120, 0));
-                sketch.strokeWeight(1);
-                sketch.line(p.x, p.y, other.x, other.y);
-              }
-            }
+            n.vx = (n.vx + forceX) * damping;
+            n.vy = (n.vy + forceY) * damping;
+            
+            n.x += n.vx;
+            n.y += n.vy;
+          }
+          
+          // Render the squishy, gelatinous softbody shape
+          s.stroke(0, 255, 255, 220); // Neon cyan outline
+          s.strokeWeight(4);
+          s.fill(0, 255, 255, 45); // Semi-transparent cyber fill
+          
+          s.beginShape();
+          // Draw a smooth curved vertex perimeter
+          for (let i = 0; i < numNodes; i++) {
+            s.curveVertex(nodes[i].x, nodes[i].y);
+          }
+          // Close the curve loop by repeating the first 3 nodes
+          for (let i = 0; i < 3; i++) {
+            s.curveVertex(nodes[i].x, nodes[i].y);
+          }
+          s.endShape();
+          
+          // Draw structural connection lines to show the engineering layout
+          s.stroke(0, 255, 255, 40);
+          s.strokeWeight(1);
+          for (let i = 0; i < numNodes; i++) {
+            s.line(centerX, centerY, nodes[i].x, nodes[i].y);
           }
         };
 
-        sketch.windowResized = function() {
-          sketch.resizeCanvas(sketch.windowWidth, sketch.windowHeight);
+        s.windowResized = function() {
+          s.resizeCanvas(s.windowWidth, s.windowHeight);
         };
       });
     }
