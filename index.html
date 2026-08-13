@@ -199,41 +199,40 @@
     <br>
     <br>
     <br>
-   <!-- Include the official modern p5.js library engine safely -->
+ <!-- Include the official modern p5.js library engine safely -->
 <script src="https://cloudflare.com"></script>
 
-<!-- Custom Handwritten SHS Render Canvas -->
+<!-- Anchor layer position node -->
+<div id="shs-matrix-bg" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; pointer-events:none;"></div>
+
 <script>
   let particles = [];
-  const maxParticles = 40; // Clamped threshold to guarantee 0% lag on Chromebooks
+  const maxParticles = 40; // Clamped threshold to guarantee 0% lag on school firewalls
 
   function setup() {
-    // Spawns the rendering layer smoothly across the full client window screen
+    // Hooks the graphic directly into our verified anchor layer node
     let canvas = createCanvas(windowWidth, windowHeight);
-    canvas.position(0, 0);
-    canvas.style('z-index', '-1'); // Places it safely in the background behind text/buttons
-    canvas.style('position', 'fixed'); // Keeps it locked smoothly during scrolls
+    canvas.parent('shs-matrix-bg');
     
     // Construct coordinate objects manually
     for (let i = 0; i < maxParticles; i++) {
       particles.push({
         x: random(windowWidth),
         y: random(windowHeight),
-        vx: random(-1, 1),
-        vy: random(-1, 1),
+        vx: random(-0.8, 0.8),
+        vy: random(-0.8, 0.8),
         size: random(2, 4)
       });
     }
   }
 
   function draw() {
-    clear(); // Keeps your HTML page transparent so your original background color stays perfect
+    clear(); // Removes background paint layers to prevent blocking your HTML text boxes
     
     // Process tracking vectors frame-by-frame
     for (let i = 0; i < particles.length; i++) {
       let p = particles[i];
       
-      // Update particle positions
       p.x += p.vx;
       p.y += p.vy;
       
@@ -241,7 +240,7 @@
       if (p.x < 0 || p.x > width) p.vx *= -1;
       if (p.y < 0 || p.y > height) p.vy *= -1;
       
-      // Render the sharp cyan matrix nodes
+      // Render sharp cyan matrix nodes
       noStroke();
       fill(0, 255, 255, 180);
       ellipse(p.x, p.y, p.size);
@@ -251,7 +250,7 @@
         let other = particles[j];
         let d = dist(p.x, p.y, other.x, other.y);
         if (d < 120) {
-          stroke(0, 255, 255, map(d, 0, 120, 100, 0));
+          stroke(0, 255, 255, map(d, 0, 120, 120, 0));
           strokeWeight(1);
           line(p.x, p.y, other.x, other.y);
         }
@@ -259,7 +258,6 @@
     }
   }
 
-  // Ensures the matrix adapts instantly if a player resizes their window
   function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
   }
