@@ -1,0 +1,67 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>SHS Elite - Softbody Physics Matrix</title>
+<script src="https://cloudflare.com"></script>
+<style>
+  body { background:#0a0a0a; color:#fff; font-family:sans-serif; margin:0; overflow:hidden; }
+  header { border-bottom:2px solid #00ffff; padding:15px; display:flex; justify-content:between; align-items:center; position:absolute; width:100%; box-sizing:border-box; z-index:10; }
+  h1 { margin:0; font-size:18px; color:#00ffff; font-family:monospace; }
+  .control-box { position:absolute; top:40%; left:50%; transform:translate(-50%, -50%); background:#111; border:1px solid #00ffff; padding:25px; border-radius:8px; text-align:center; z-index:20; max-width:400px; }
+  .sim-btn { background:#111; color:#00ffff; border:1px solid #00ffff; padding:12px 24px; font-family:monospace; cursor:pointer; font-size:12px; font-weight:bold; margin-top:15px; }
+  .sim-btn:hover { background:#00ffff; color:#0a0a0a; }
+  #canvas-node { position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:1; }
+</style></head><body>
+<header>
+  <h1>SHAHADAH STUDIOS ELITE // CORE HARDWARE TERMINAL</h1>
+</header>
+
+<div class="control-box" id="shs-interface">
+  <p style="font-family:monospace; font-size:12px; color:#00ffff; margin:0 0 10px 0;">// HARDWARE ENGINE MODULE ACTIVE</p>
+  <p style="font-size:13px; color:#ccc; margin:0;">Press the verification trigger below to initialize the handwritten p5.js softbody spring grid simulation live.</p>
+  <button class="sim-btn" id="start-trigger">LAUNCH PHYSICS SIMULATION</button>
+</div>
+
+<div id="canvas-node"></div>
+
+<script>
+  document.getElementById('start-trigger').addEventListener('click', function() {
+    document.getElementById('shs-interface').style.display = 'none'; // Clear interface instantly
+    
+    new p5(function(s) {
+      let centerX, centerY, numNodes = 24, radius = 120, nodes = [], springConst = 0.04, damping = 0.88;
+
+      s.setup = function() {
+        let canvas = s.createCanvas(s.windowWidth, s.windowHeight);
+        canvas.parent('canvas-node');
+        centerX = s.width / 2; centerY = s.height / 2;
+        for (let i = 0; i < numNodes; i++) {
+          let angle = s.map(i, 0, numNodes, 0, s.TWO_PI);
+          nodes.push({ baseX: s.cos(angle)*radius, baseY: s.sin(angle)*radius, x: s.cos(angle)*radius, y: s.sin(angle)*radius, vx: 0, vy: 0 });
+        }
+      };
+
+      s.draw = function() {
+        s.background(10, 10, 12); // Paint solid matrix environment
+        centerX = s.lerp(centerX, s.mouseX || s.width/2, 0.05);
+        centerY = s.lerp(centerY, s.mouseY || s.height/2, 0.05);
+        
+        for (let i = 0; i < numNodes; i++) {
+          let n = nodes[i], targetX = centerX + n.baseX, targetY = centerY + n.baseY;
+          n.vx = (n.vx + (targetX - n.x) * springConst) * damping;
+          n.vy = (n.vy + (targetY - n.y) * springConst) * damping;
+          n.x += n.vx; n.y += n.vy;
+        }
+        
+        s.stroke(0, 255, 255, 220); s.strokeWeight(4); s.fill(0, 255, 255, 45);
+        s.beginShape();
+        for (let i = 0; i < numNodes; i++) s.curveVertex(nodes[i].x, nodes[i].y);
+        for (let i = 0; i < 3; i++) s.curveVertex(nodes[i].x, nodes[i].y);
+        s.endShape();
+        
+        s.stroke(0, 255, 255, 40); s.strokeWeight(1);
+        for (let i = 0; i < numNodes; i++) s.line(centerX, centerY, nodes[i].x, nodes[i].y);
+      };
+
+      s.windowResized = function() { s.resizeCanvas(s.windowWidth, s.windowHeight); };
+    });
+  });
+</script></body></html>
