@@ -199,104 +199,11 @@
     <br>
     <br>
     <br>
-<!-- STEP 1: Load the official modern p5.js library safely -->
-<script src="https://cloudflare.com"></script>
-
-<!-- STEP 2: The container node (pins the squishy physics safely behind buttons) -->
-<div id="shs-softbody-canvas" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; pointer-events:none;"></div>
-
-<!-- STEP 3: The Handwritten Softbody Physics Simulation Engine -->
-<script>
-  window.onload = function() {
-    if (typeof p5 !== 'undefined') {
-      new p5(function(s) {
-        // Physics constants for spring tension and node distribution
-        let centerX, centerY;
-        let numNodes = 24; 
-        let radius = 120;
-        let nodes = [];
-        let springConst = 0.04;
-        let damping = 0.88;
-
-        s.setup = function() {
-          let canvas = s.createCanvas(s.windowWidth, s.windowHeight);
-          canvas.parent('shs-softbody-canvas');
-          
-          centerX = s.width / 2;
-          centerY = s.height / 2;
-          
-          // Manually plot vectors in a circular perimeter ring
-          for (let i = 0; i < numNodes; i++) {
-            let angle = s.map(i, 0, numNodes, 0, s.TWO_PI);
-            nodes.push({
-              baseX: s.cos(angle) * radius,
-              baseY: s.sin(angle) * radius,
-              x: s.cos(angle) * radius,
-              y: s.sin(angle) * radius,
-              vx: 0,
-              vy: 0
-            });
-          }
-        };
-
-        s.draw = function() {
-          s.clear(); // Keeps your background transparent so your CSS remains active
-          
-          // Force tracking: Move the central core toward the mouse position smoothly
-          centerX = s.lerp(centerX, s.mouseX || s.width / 2, 0.05);
-          centerY = s.lerp(centerY, s.mouseY || s.height / 2, 0.05);
-          
-          // Calculate individual point vectors frame-by-frame
-          for (let i = 0; i < numNodes; i++) {
-            let n = nodes[i];
-            
-            // Core target physics logic (spring force pull)
-            let targetX = centerX + n.baseX;
-            let targetY = centerY + n.baseY;
-            
-            let forceX = (targetX - n.x) * springConst;
-            let forceY = (targetY - n.y) * springConst;
-            
-            n.vx = (n.vx + forceX) * damping;
-            n.vy = (n.vy + forceY) * damping;
-            
-            n.x += n.vx;
-            n.y += n.vy;
-          }
-          
-          // Render the squishy, gelatinous softbody shape
-          s.stroke(0, 255, 255, 220); // Neon cyan outline
-          s.strokeWeight(4);
-          s.fill(0, 255, 255, 45); // Semi-transparent cyber fill
-          
-          s.beginShape();
-          // Draw a smooth curved vertex perimeter
-          for (let i = 0; i < numNodes; i++) {
-            s.curveVertex(nodes[i].x, nodes[i].y);
-          }
-          // Close the curve loop by repeating the first 3 nodes
-          for (let i = 0; i < 3; i++) {
-            s.curveVertex(nodes[i].x, nodes[i].y);
-          }
-          s.endShape();
-          
-          // Draw structural connection lines to show the engineering layout
-          s.stroke(0, 255, 255, 40);
-          s.strokeWeight(1);
-          for (let i = 0; i < numNodes; i++) {
-            s.line(centerX, centerY, nodes[i].x, nodes[i].y);
-          }
-        };
-
-        s.windowResized = function() {
-          s.resizeCanvas(s.windowWidth, s.windowHeight);
-        };
-      });
-    }
-  };
-</script>
-
-
+<h2>Our SoftBody physics Made with JS</h2>
+ <a href="ho.html" class="project-card" target="_blank">
+                <div class="project-status status-eternal">ETERNAL UPGRADES</div>
+                <div class="project-name">Elite Softbody</div>
+                <div class="project-desc">Next-generation way to make softbody physics with p5.js</div>
 <br>
     <!-- Studio Legacy & History Section -->
         <div class="manifesto-box" style="border-left-color: #00ff00; margin-bottom: 40px;">
