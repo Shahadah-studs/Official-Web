@@ -200,68 +200,71 @@
     <br>
     <br>
  <!-- Include the official modern p5.js library engine safely -->
+<!-- STEP 1: Load the official modern p5.js library safely -->
 <script src="https://cloudflare.com"></script>
 
-<!-- Anchor layer position node -->
+<!-- STEP 2: The background container node -->
 <div id="shs-matrix-bg" style="position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-1; pointer-events:none;"></div>
 
+<!-- STEP 3: Your separate, handwritten particle canvas code -->
 <script>
-  let particles = [];
-  const maxParticles = 40; // Clamped threshold to guarantee 0% lag on school firewalls
+  window.onload = function() {
+    // This wrapper forces p5.js to wait until the page elements are active
+    if (typeof p5 !== 'undefined') {
+      new p5(function(sketch) {
+        let particles = [];
+        const maxParticles = 40;
 
-  function setup() {
-    // Hooks the graphic directly into our verified anchor layer node
-    let canvas = createCanvas(windowWidth, windowHeight);
-    canvas.parent('shs-matrix-bg');
-    
-    // Construct coordinate objects manually
-    for (let i = 0; i < maxParticles; i++) {
-      particles.push({
-        x: random(windowWidth),
-        y: random(windowHeight),
-        vx: random(-0.8, 0.8),
-        vy: random(-0.8, 0.8),
-        size: random(2, 4)
+        sketch.setup = function() {
+          let canvas = sketch.createCanvas(sketch.windowWidth, sketch.windowHeight);
+          canvas.parent('shs-matrix-bg');
+          
+          for (let i = 0; i < maxParticles; i++) {
+            particles.push({
+              x: sketch.random(sketch.windowWidth),
+              y: sketch.random(sketch.windowHeight),
+              vx: sketch.random(-0.8, 0.8),
+              vy: sketch.random(-0.8, 0.8),
+              size: sketch.random(2, 4)
+            });
+          }
+        };
+
+        sketch.draw = function() {
+          sketch.clear();
+          
+          for (let i = 0; i < particles.length; i++) {
+            let p = particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            
+            if (p.x < 0 || p.x > sketch.width) p.vx *= -1;
+            if (p.y < 0 || p.y > sketch.height) p.vy *= -1;
+            
+            sketch.noStroke();
+            sketch.fill(0, 255, 255, 180);
+            sketch.ellipse(p.x, p.y, p.size);
+            
+            for (let j = i + 1; j < particles.length; j++) {
+              let other = particles[j];
+              let d = sketch.dist(p.x, p.y, other.x, other.y);
+              if (d < 120) {
+                sketch.stroke(0, 255, 255, sketch.map(d, 0, 120, 120, 0));
+                sketch.strokeWeight(1);
+                sketch.line(p.x, p.y, other.x, other.y);
+              }
+            }
+          }
+        };
+
+        sketch.windowResized = function() {
+          sketch.resizeCanvas(sketch.windowWidth, sketch.windowHeight);
+        };
       });
     }
-  }
-
-  function draw() {
-    clear(); // Removes background paint layers to prevent blocking your HTML text boxes
-    
-    // Process tracking vectors frame-by-frame
-    for (let i = 0; i < particles.length; i++) {
-      let p = particles[i];
-      
-      p.x += p.vx;
-      p.y += p.vy;
-      
-      // Handle screen boundary bounces automatically
-      if (p.x < 0 || p.x > width) p.vx *= -1;
-      if (p.y < 0 || p.y > height) p.vy *= -1;
-      
-      // Render sharp cyan matrix nodes
-      noStroke();
-      fill(0, 255, 255, 180);
-      ellipse(p.x, p.y, p.size);
-      
-      // Custom distance calculation loop to link nearby nodes
-      for (let j = i + 1; j < particles.length; j++) {
-        let other = particles[j];
-        let d = dist(p.x, p.y, other.x, other.y);
-        if (d < 120) {
-          stroke(0, 255, 255, map(d, 0, 120, 120, 0));
-          strokeWeight(1);
-          line(p.x, p.y, other.x, other.y);
-        }
-      }
-    }
-  }
-
-  function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
-  }
+  };
 </script>
+
 
 <br>
     <!-- Studio Legacy & History Section -->
