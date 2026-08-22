@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Ownership // Shahadah Studios Elite</title>
+    <style>
+        /* ==================================================================
+           👑 1:1 AUTHENTIC BLOXDLABS REMASTER (GOLD & METALLIC BLACK)
+           ================================================================== */
+        :root {
+            --bg-metallic: #08080b;
+            --surface-panel: #0f0f14;
+            --gold-primary: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.15);
+            --text-main: #ffffff;
+            --text-muted: #8e8e9f;
+            --neon-green: #23bf73;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-metallic);
+            color: var(--text-main);
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* MASTER WINDOW CANVAS - CLEAN BACKGROUND WITH NO OUTER BORDER */
+        .workspace-canvas {
+            width: 100%;
+            max-width: 700px;
+            margin: 40px 20px;
+            background-color: var(--surface-panel);
+            padding: 35px;
+            position: relative;
+        }
+
+        /* NAVIGATION CONTROL LINK */
+        .navigation-row {
+            margin-bottom: 25px;
+        }
+
+        .back-link {
+            font-size: 12px;
+            color: var(--gold-primary);
+            text-decoration: none;
+            border: 1px solid var(--gold-primary);
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .back-link:hover {
+            background-color: var(--gold-primary);
+            color: var(--bg-metallic);
+        }
+
+        /* HEADER FRAME */
+        header {
+            border-bottom: 2px solid var(--gold-primary);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            color: var(--gold-primary);
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: 0.5px;
+            font-weight: bold;
+        }
+
+        .status-badge {
+            font-size: 11px;
+            color: var(--neon-green);
+            font-weight: bold;
+            border: 1px solid var(--neon-green);
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* SECTION HEADER CONFIGURATIONS */
+        .grid-title {
+            color: var(--gold-primary);
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .grid-title::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 14px;
+            background-color: var(--gold-primary);
+        }
+
+        /* PERSONNEL POSITION ROW GRIDS */
+        .personnel-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        /* 1:1 SHARP GRID PROFILE BOX - THIS PRESERVES YOUR GOLD NAMEPLATE BORDER */
+        .personnel-node {
+            background-color: var(--bg-metallic);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-left: 4px solid var(--gold-primary);
+            padding: 16px 22px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .personnel-node:hover {
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.1);
+        }
+
+        .personnel-identity {
+            color: var(--text-main);
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .personnel-assignment {
+            color: var(--neon-green);
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(35, 191, 115, 0.3);
+            padding: 4px 8px;
+            border-radius: 3px;
+            background-color: rgba(35, 191, 115, 0.05);
+        }
+
+        /* MANIFESTO AND DIVISION BLOCKS */
+        .division-details {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-top: -10px;
+            margin-bottom: 30px;
+            padding-left: 12px;
+            border-left: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        /* REMASTERED QUOTE CONTAINER - LARGER AND ITALIC-ISH STYLE */
+        .signature-quote-container {
+            background-color: var(--bg-metallic);
+            border: 1px dashed rgba(212, 175, 55, 0.35);
+            padding: 20px 24px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+        }
+
+        .quote-header-tag {
+            color: var(--gold-primary);
+            font-size: 13px; /* Slightly larger heading font */
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .quote-input-field {
+            color: #7a7a8a;
+            font-size: 16px; /* Expanded size loop for clear reading view */
+            margin: 0;
+            font-style: italic; /* Native italic-ish typography presentation */
+            line-height: 1.4;
+        }
+
+        /* INDUSTRIAL BASE FOOTER MARQUEE */
+        footer {
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            padding-top: 22px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--gold-primary);
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="workspace-canvas">
+        
+        <div class="navigation-row">
+            <a href="index.html" class="back-link">&lt; Return to Hub</a>
+        </div>
+
+        <header>
+            <h1>Shahadah Studios Elite</h1>
+            <div class="status-badge">Studio Profile</div>
+        </header>
+
+        <div class="grid-title">Studio Ownership</div>
+        
+        <div class="personnel-list">
+            <div class="personnel-node">
+                <span>Shahadah_Studios</span>
+                <span class="personnel-assignment">Founder &amp; Lead Architect</span>
+            </div>
+        </div>
+
+        <div class="division-details">
+            Grade 5 Engineering Division // Est. 2026<br>
+            All development operations, server configurations, and layout properties operate strictly under solo structural command chain whitelists.
+        </div>
+
+        <!-- REMASTERED WORKSPACE QUOTE BOX SECTION -->
+        <div class="signature-quote-container">
+            <div class="quote-header-tag">Our STORY</div>
+            <p class="quote-input-field">"My journey started when i made Bloxdworldcode. I saw it was helping people by holding World codes and commands for Bloxd.io. I saw a hype of people using it to make Lobbies and Custom games, about 20 custom games/lobbies existing for it, and all of them are high quality lobbies/games. The days passed and i kept pushing forward. I keep building more and more and remastering my work also trying to help the community, not only for bloxd but the world"</p><div class="quote-header-tag"><br>"Its not the code I do, It's the courage and strength i see and use" <br> -- SHahadah_Studios</div> 
+        </div>
+
+      
+    </div>
+
+</body>
+</html>
+
