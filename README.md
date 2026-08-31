@@ -21,7 +21,7 @@ Our frontend layout is engineered for maximum performance, strict user accessibi
 The portal safely indexes the complete operational matrix of Shahadah Studios Elite:
 
 ### 1. 🌐 BloxdWorldCode (`bloxdworldcode.vercel.app`)
-Our high-traffic developer incubator hub, currently buffering community user migration. Features a master database of custom world codes, verified system command layouts, and an **exclusive same-tab full-screen live game client** optimized for touchscreen tablet devices.
+Our high-traffic developer incubator hub for Bloxd.io, currently buffering community user migration. Features a master database of custom Bloxd.io world codes, verified system command layouts, and an **exclusive same-tab full-screen live game client for Bloxd.io,** optimized for touchscreen tablet devices.
 
 ### 2. 🌌 Off-Limits Overdrive (`shahadah-studs.github.io/Off-limits-Overdrive-/`)
 A massive, standalone open-world city sandbox game engineered entirely from scratch using clean **HTML, CSS, and TypeScript**. Built using custom performance budgets to preserve lightweight rendering pipelines.
