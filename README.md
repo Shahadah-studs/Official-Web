@@ -34,7 +34,8 @@ A massive, standalone open-world city sandbox game engineered entirely from scra
 Our local, family-owned business connection layer in Prince Albert. This node forms the baseline infrastructure for our direct, ethical **Institutional Sponsorship Model**—connecting real local commerce with independent digital software development.
 
 ### 5. 🚪 Backrooms web lvl 0
-Our `horror` game, made with BayblonJS and Typescript/JavaScript!
+ Our horror game, made with BayblonJS and Typescript/JavaScript!
+
 ---
 
 ## 🛠️ Security & Governance Matrix
